@@ -1,10 +1,5 @@
 version: "3"
 
-volumes:
-  ckan_storage:
-  pg_data:
-  solr_data:
-
 services:
 
   ckan-dev:
@@ -26,7 +21,7 @@ services:
     ports:
       - "0.0.0.0:${CKAN_PORT_HOST}:${CKAN_PORT}"
     volumes:
-      - ckan_storage:/var/lib/ckan
+      - ./ckan_storage:/var/lib/ckan
       - ./src:/srv/app/src_extensions
     restart: unless-stopped
     healthcheck:
@@ -54,8 +49,10 @@ services:
       - DATASTORE_READONLY_PASSWORD
       - DATASTORE_DB
     volumes:
-      - pg_data:/var/lib/postgresql/data
+      - ./pg_data:/var/lib/postgresql/data
     restart: unless-stopped
+    ports:
+      - "5432:5432"
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}"]
      
@@ -63,7 +60,7 @@ services:
     container_name: ${SOLR_CONTAINER_NAME}
     image: ckan/ckan-solr:${SOLR_IMAGE_VERSION}
     volumes:
-      - solr_data:/var/solr
+      - ./solr_data:/var/solr
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:8983/solr/"]
