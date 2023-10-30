@@ -23,7 +23,7 @@ services:
     volumes:
       - ./ckan_storage:/var/lib/ckan
       - ./src:/srv/app/src_extensions
-    restart: unless-stopped
+#    restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:5000"]
     
@@ -61,7 +61,12 @@ services:
     image: ckan/ckan-solr:${SOLR_IMAGE_VERSION}
     volumes:
       - ./solr_data:/var/solr
-    restart: unless-stopped
+#    restart: unless-stopped
+    environment:
+        - SOLR_HEAP=4g
+        - SOLR_JAVA_MEM="-Xms4g -Xmx4g"
+    ports:
+      - "8983:8983"
     healthcheck:
       test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:8983/solr/"]
 
