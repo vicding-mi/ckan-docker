@@ -8,3 +8,8 @@ _solr/schema.xml
 _src/*
 local/*
 .env
+.idea
+ckan_storage
+pg_data
+solr_data
+src
