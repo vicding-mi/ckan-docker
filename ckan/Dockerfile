@@ -1,5 +1,4 @@
 FROM ckan/ckan-base:2.10.1
-#FROM ckan/ckan-base:2.9.9
 
 # Set up environment variables
 ENV APP_DIR=/srv/app
@@ -10,3 +9,6 @@ RUN echo ${TZ} > /etc/timezone
 RUN if ! [ /usr/share/zoneinfo/${TZ} -ef /etc/localtime ]; then \
         cp /usr/share/zoneinfo/${TZ} /etc/localtime ;\
     fi ;
+
+RUN pip3 install -e 'git+https://github.com/vicding-mi/ckanext-isebel.git@main#egg=ckanext-isebel' && \
+    pip3 install ckanapi
