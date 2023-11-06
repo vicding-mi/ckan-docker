@@ -50,9 +50,11 @@ UWSGI_OPTS="--plugins http,python \
 if [ $? -eq 0 ]
 then
     # Start supervisord
-    supervisord --configuration /etc/supervisord.conf &
+#    supervisord --configuration /etc/supervisord.conf &
     # Start uwsgi
-    uwsgi $UWSGI_OPTS
+#    uwsgi $UWSGI_OPTS
+  gunicorn --bind 0.0.0.0:5000 --workers 4 --timeout $UWSGI_HARAKIRI --user 92 --group 92 --threads 2 wsgi:application
+#  gunicorn --bind 0.0.0.0:5000 --workers 4 --reload --timeout 300 wsgi:application
 else
   echo "[prerun] failed...not starting CKAN."
 fi

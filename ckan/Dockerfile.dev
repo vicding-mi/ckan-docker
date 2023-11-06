@@ -10,6 +10,8 @@ RUN if ! [ /usr/share/zoneinfo/${TZ} -ef /etc/localtime ]; then \
         cp /usr/share/zoneinfo/${TZ} /etc/localtime ;\
     fi ;
 
+RUN pip install gunicorn
+COPY setup/start_ckan_development.sh.override ${APP_DIR}/start_ckan_development.sh
 # Install any extensions needed by your CKAN instance
 # - Make sure to add the plugins to CKAN__PLUGINS in the .env file
 # - Also make sure all extra configuration options are added to the CKAN config file (ckan.ini)

@@ -11,6 +11,7 @@ RUN if ! [ /usr/share/zoneinfo/${TZ} -ef /etc/localtime ]; then \
     fi ;
 
 RUN pip3 install -e 'git+https://github.com/vicding-mi/ckanext-isebel.git@main#egg=ckanext-isebel' && \
-    pip3 install ckanapi
+    pip3 install ckanapi && \
+    pip3 install gunicorn
 
 COPY setup/start_ckan.sh.override ${APP_DIR}/start_ckan.sh
