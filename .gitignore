@@ -13,3 +13,4 @@ ckan_storage
 pg_data
 solr_data
 src
+datasets_org.jsonl.gz

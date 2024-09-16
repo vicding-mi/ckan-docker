@@ -1,4 +1,10 @@
-version: "3"
+volumes:
+  ckan_storage:
+  pg_data:
+  solr_data:
+  pip_cache:
+  site_packages:
+  vscode_server:
 
 services:
 
@@ -11,22 +17,22 @@ services:
         - TZ=${TZ}
     env_file:
       - .env
-    depends_on:
-      db:
-        condition: service_healthy
-      solr:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+    links:
+      - db
+      - solr
+      - redis
     ports:
-      - "0.0.0.0:${CKAN_PORT_HOST}:${CKAN_PORT}"
+      - "0.0.0.0:${CKAN_PORT_HOST}:5000"
     volumes:
-      - ./ckan_storage:/var/lib/ckan
+      - ckan_storage:/var/lib/ckan
       - ./src:/srv/app/src_extensions
-#    restart: unless-stopped
+      - pip_cache:/root/.cache/pip
+      - site_packages:/usr/lib/python3.10/site-packages
+      - vscode_server:/root/.vscode-server
+    restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:5000"]
-    
+
   datapusher:
     container_name: ${DATAPUSHER_CONTAINER_NAME}
     image: ckan/ckan-base-datapusher:${DATAPUSHER_VERSION}
@@ -49,10 +55,8 @@ services:
       - DATASTORE_READONLY_PASSWORD
       - DATASTORE_DB
     volumes:
-      - ./pg_data:/var/lib/postgresql/data
+      - pg_data:/var/lib/postgresql/data
     restart: unless-stopped
-    ports:
-      - "5432:5432"
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}"]
      
@@ -60,13 +64,11 @@ services:
     container_name: ${SOLR_CONTAINER_NAME}
     image: ckan/ckan-solr:${SOLR_IMAGE_VERSION}
     volumes:
-      - ./solr_data:/var/solr
-#    restart: unless-stopped
+      - solr_data:/var/solr
+    restart: unless-stopped
     environment:
-        - SOLR_HEAP=4g
-        - SOLR_JAVA_MEM="-Xms4g -Xmx4g"
-    ports:
-      - "8983:8983"
+      - SOLR_HEAP=4g
+      - SOLR_JAVA_MEM="-Xms4g -Xmx4g"
     healthcheck:
       test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:8983/solr/"]
 
