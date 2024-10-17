@@ -21,11 +21,12 @@ services:
       - "0.0.0.0:${NGINX_SSLPORT_HOST}:${NGINX_SSLPORT}"
     
   ckan:
-    build:
-      context: ckan/
-      dockerfile: Dockerfile
-      args:
-        - TZ=${TZ}
+    image: vicding81/ckan-docker-ckan:2.10.1
+#    build:
+#      context: ckan/
+#      dockerfile: Dockerfile
+#      args:
+#        - TZ=${TZ}
     networks:
       - ckannet
       - dbnet
@@ -81,7 +82,8 @@ services:
   solr:
     networks:
       - solrnet
-    image: ckan/ckan-solr:${SOLR_IMAGE_VERSION}
+    image: registry.huc.knaw.nl/isebel/ckan-solr:2.10-solr9
+#    image: ckan/ckan-solr:${SOLR_IMAGE_VERSION}
     volumes:
       - solr_data:/var/solr
     restart: unless-stopped
