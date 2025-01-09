@@ -43,8 +43,8 @@ services:
         condition: service_healthy
     volumes:
       - ckan_storage:/var/lib/ckan
-      - pip_cache:/root/.cache/pip
-      - site_packages:/usr/lib/python3.10/site-packages
+#      - pip_cache:/root/.cache/pip
+#      - site_packages:/usr/lib/python3.10/site-packages
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:5000"]
@@ -54,6 +54,7 @@ services:
       - ckannet
       - dbnet
     image: ckan/ckan-base-datapusher:${DATAPUSHER_VERSION}
+    platform: linux/amd64
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:8800"]

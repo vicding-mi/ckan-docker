@@ -1,4 +1,4 @@
-FROM ckan/ckan-base:2.11.0
+FROM ckan/ckan-base:2.10.1
 
 # Install any extensions needed by your CKAN instance
 # See Dockerfile.dev for more details and examples
@@ -18,7 +18,8 @@ RUN for d in $APP_DIR/patches/*; do \
         fi ; \
     done
 
-RUN pip3 install -e 'git+https://github.com/vicding-mi/ckanext-isebel.git@main#egg=ckanext-isebel' && \
+# TODO: installing from fixes branch. Rewrite using new standard - using pyproject.toml then switch back to main
+RUN pip3 install -e 'git+https://github.com/vicding-mi/ckanext-isebel.git@fixes#egg=ckanext-isebel' && \
     pip3 install ckanapi && \
     pip3 install gunicorn
 

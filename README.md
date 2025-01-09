@@ -55,6 +55,12 @@ more information.
 
 ## 4.  Install (build and run) CKAN plus dependencies
 
+### Building with bake
+```shell
+docker buildx bake --no-cache -f docker-bake.hcl -f env.hcl --load
+```
+** Note: base image is ckan/ckan-base:2.10.1 and it is amd64 only. 
+
 ### Base mode
 
 Use this if you are a maintainer and will not be making code changes to CKAN or to CKAN extensions
